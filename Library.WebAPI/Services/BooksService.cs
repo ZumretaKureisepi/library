@@ -99,7 +99,6 @@ namespace Library.WebAPI.Services
        .Include(x => x.AuthBooks)
        .FirstOrDefaultAsync(x => x.BookId == request.BookId);
 
-            /*ako unutar niza id-ijeva autora nije sadrzan id autora iz baze onda su izbrisani*/
             var authBooksToRemove = book.AuthBooks.Where(x => !request.AuthorIds.Contains(x.AuthorId));
 
             foreach (var author in authBooksToRemove)
