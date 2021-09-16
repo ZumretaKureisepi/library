@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Library.WebAPI.Models
 {
@@ -16,7 +14,5 @@ namespace Library.WebAPI.Models
         public bool IsDeleted { get; set; }
 
         public ICollection<AuthBook> AuthBooks { get; set; }
-
     }
 }
-    

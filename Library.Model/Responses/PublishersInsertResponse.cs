@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Library.Model.Responses
+﻿namespace Library.Model.Responses
 {
     public class PublishersInsertResponse
     {

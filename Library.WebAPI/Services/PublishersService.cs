@@ -5,7 +5,6 @@ using Library.Model.Responses;
 using Library.WebAPI.Models;
 using Library.Model.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,19 +15,14 @@ namespace Library.WebAPI.Services
         public interface IPublishersService
         {
             public Task<List<PublisherGetDto>> GetPublishersAsync(PublishersSearchRequest request);
-            public Task<PublisherGetDto> DeletePublisher(long id);
             public Task<PublisherPaginateGetDto> GetPublishersPaginateAsync(PublishersSearchRequest request);
-            public Task<PublishersInsertResponse> InsertPublisher(PublishersInsertRequest Publisher);
-            public Task<PublishersEditGetDto> GetPublisherById(long id);
-            public Task<PublishersInsertResponse> Update(PublishersInsertRequest request);
-
-
-
-
-
+            public Task<PublishersEditGetDto> GetPublisherByIdAsync(long id);
+            public Task<PublishersInsertResponse> InsertPublisherAsync(PublishersInsertRequest Publisher);
+            public Task<PublishersInsertResponse> UpdatePublisherAsync(PublishersInsertRequest request);
+            public Task<PublisherGetDto> DeletePublisherAsync(long id);
         }
 
-    public class PublishersService : IPublishersService
+        public class PublishersService : IPublishersService
         {
             private readonly LibraryContext _context;
             private readonly IMapper _mapper;
@@ -41,12 +35,12 @@ namespace Library.WebAPI.Services
 
         public async Task<List<PublisherGetDto>> GetPublishersAsync(PublishersSearchRequest request)
         {
-            var list = await _context.Publishers
+            var publishersList = await _context.Publishers
             .Where(x => request.Name == null || x.Name.ToLower()
             .Contains(request.Name.ToLower())).Include(x => x.Adress)
             .OrderBy(x => x.PublisherId).ToListAsync();
 
-             return _mapper.Map<List<PublisherGetDto>>(list);
+            return _mapper.Map<List<PublisherGetDto>>(publishersList);
         }
 
         public async Task<PublisherPaginateGetDto> GetPublishersPaginateAsync(PublishersSearchRequest request)
@@ -66,7 +60,50 @@ namespace Library.WebAPI.Services
             return publishersPaginate;
         }
 
-        public async Task<PublishersInsertResponse> Update(PublishersInsertRequest request)
+        public async Task<PublishersEditGetDto> GetPublisherByIdAsync(long id)
+        {
+            var publisherGetDto = await _context.Publishers
+                .Where(x => x.PublisherId == id)
+                .Include(x => x.Adress)
+                .Select(x => new PublishersEditGetDto
+                {
+                    Name = x.Name,
+                    PublisherId = x.PublisherId,
+                    AdressId = x.AdressId,
+                    ZipCode = x.Adress.ZipCode,
+                    City = x.Adress.City,
+                    Country = x.Adress.Country,
+                    Road = x.Adress.Road
+
+                })
+                .FirstOrDefaultAsync();
+
+            return publisherGetDto;
+        }
+
+        public async Task<PublishersInsertResponse> InsertPublisherAsync(PublishersInsertRequest Publisher)
+        {
+            var newAdress = new Adress
+            {
+                City = Publisher.City,
+                Country = Publisher.Country,
+                Road = Publisher.Road,
+                ZipCode = Publisher.ZipCode
+            };
+
+            var newPublisher = new Publisher
+            {
+                Name = Publisher.Name,
+                Adress = newAdress
+            };
+
+            _context.Publishers.Add(newPublisher);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<PublishersInsertResponse>(newPublisher);
+        }
+
+        public async Task<PublishersInsertResponse> UpdatePublisherAsync(PublishersInsertRequest request)
         {
             var publisher =await _context.Publishers
             .FirstOrDefaultAsync(x => x.PublisherId == request.PublisherId);
@@ -82,79 +119,20 @@ namespace Library.WebAPI.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<PublishersInsertResponse>(publisher);
-
-
         }
 
-        public async Task<PublishersEditGetDto> GetPublisherById(long id)
+        public async Task<PublisherGetDto> DeletePublisherAsync(long id)
         {
-            var publisherGetDto = await _context.Publishers
-                .Where(x => x.PublisherId == id)
-                .Include(x => x.Adress)
-                .Select(x => new PublishersEditGetDto
-                {
-                    Name=x.Name,
-                    PublisherId=x.PublisherId,
-                    AdressId=x.AdressId,
-                    ZipCode=x.Adress.ZipCode,
-                    City=x.Adress.City,
-                    Country=x.Adress.Country,
-                    Road=x.Adress.Road
-
-                })
-                .FirstOrDefaultAsync();
-
-            return publisherGetDto;
-        }
-
-        public async Task<PublisherGetDto> DeletePublisher(long id)
+            var Publisher =await _context.Publishers.FindAsync(id);
+            if (Publisher == null && Publisher.IsDeleted)
             {
-                var Publisher =await _context.Publishers.FindAsync(id);
-                if (Publisher == null && Publisher.IsDeleted)
-                {
-                    return null;
-                }
-
-                Publisher.IsDeleted = true;
-                await _context.SaveChangesAsync();
-
-                return _mapper.Map<PublisherGetDto>(Publisher);
+                return null;
             }
 
-        public async Task<PublishersInsertResponse> InsertPublisher(PublishersInsertRequest Publisher)
-        {
-            var newAdress = new Adress { 
-                City = Publisher.City,
-                Country = Publisher.Country,
-                Road = Publisher.Road,
-                ZipCode = Publisher.ZipCode
-            };
-
-            var newPublisher = new Publisher
-            {
-                Name=Publisher.Name,
-                Adress=newAdress
-            };
-
-
-
-            _context.Publishers.Add(newPublisher);
+            Publisher.IsDeleted = true;
             await _context.SaveChangesAsync();
 
-
-
-            return _mapper.Map<PublishersInsertResponse>(newPublisher);
-        }
-
-
+            return _mapper.Map<PublisherGetDto>(Publisher);
+         }
     }
-
-   
-
-
-
-
-
-
-
 }

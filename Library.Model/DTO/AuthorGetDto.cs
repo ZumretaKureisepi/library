@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Library.Model.DTO
 {
@@ -13,14 +12,7 @@ namespace Library.Model.DTO
         public DateTime DateOfBirth { get; set; }
         public string BirthdayStr => DateOfBirth != null ? DateOfBirth.ToString("dd'/'MM'/'yyyy") : "";
         public string Email { get; set; }
-
         public string Image { get; set; }
-
         public List<long?> BookIds { get; set; }
-
-        
-
-
-
     }
 }

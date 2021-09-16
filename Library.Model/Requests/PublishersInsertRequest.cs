@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Library.Model.Requests
+﻿namespace Library.Model.Requests
 {
     public class PublishersInsertRequest
     {
@@ -13,10 +9,5 @@ namespace Library.Model.Requests
         public string Country { get; set; }
         public long PublisherId { get; set; }
         public long AdressId { get; set; }
-
-
-
-
-
     }
 }

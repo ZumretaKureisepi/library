@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Library.Model.Responses
 {
@@ -12,6 +10,5 @@ namespace Library.Model.Responses
         public decimal Price { get; set; }
         public long? PublisherId { get; set; }
         public List<long> AuthorIds { get; set; }
-
     }
 }

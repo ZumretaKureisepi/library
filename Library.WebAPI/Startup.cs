@@ -2,18 +2,11 @@ using Library.WebAPI.Models;
 using Library.WebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Library.WebAPI
 {
@@ -29,7 +22,7 @@ namespace Library.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var test=Configuration.GetValue<string>("ConnectionStrings:local");
+            var test = Configuration.GetValue<string>("ConnectionStrings:local");
 
             services.AddControllers();
             services.AddDbContext<LibraryContext>
@@ -40,15 +33,13 @@ namespace Library.WebAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Library API", Version = "v1" });
-                
+
             });
             services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<IAuthorsService, AuthorsService>();
             services.AddScoped<IPublishersService, PublishersService>();
-
-
 
             services.AddCors(options =>
             {

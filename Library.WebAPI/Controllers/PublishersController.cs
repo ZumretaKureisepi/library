@@ -2,11 +2,8 @@
 using Library.Model.Requests;
 using Library.Model.Responses;
 using Library.WebAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Library.WebAPI.Controllers
@@ -35,35 +32,28 @@ namespace Library.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPublisherById(long id)
+        public async Task<IActionResult> GetPublisherByIdAsync(long id)
         {
-            return Ok(await _PublishersService.GetPublisherById(id));
-        }
-
-        [HttpPut]
-        public async Task<PublishersInsertResponse> Update([FromBody] PublishersInsertRequest request)
-        {
-            return await _PublishersService.Update(request);
-        }
-
-        // DELETE: api/Authors/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<PublisherGetDto>> DeletePublisher(long id)
-        {
-            return await _PublishersService.DeletePublisher(id);
+            return Ok(await _PublishersService.GetPublisherByIdAsync(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertPublisher([FromBody] PublishersInsertRequest request)
+        public async Task<IActionResult> InsertPublisherAsync([FromBody] PublishersInsertRequest request)
         {
-            return Ok(await _PublishersService.InsertPublisher(request));
+            return Ok(await _PublishersService.InsertPublisherAsync(request));
         }
 
+        [HttpPut]
+        public async Task<PublishersInsertResponse> UpdatePublisherAsync([FromBody] PublishersInsertRequest request)
+        {
+            return await _PublishersService.UpdatePublisherAsync(request);
+        }
 
-
-
-
-
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<PublisherGetDto>> DeletePublisherAsync(long id)
+        {
+            return await _PublishersService.DeletePublisherAsync(id);
+        }
 
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Library.Model.Requests
 {
@@ -14,8 +12,5 @@ namespace Library.Model.Requests
         public long? PublisherId { get; set; }
         public string Image { get; set; }
         public List<long> AuthorIds { get; set; }
-
-
-
     }
 }

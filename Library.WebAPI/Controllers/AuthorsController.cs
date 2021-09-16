@@ -1,14 +1,9 @@
 ﻿using Library.Model.DTO;
-using Library.Model.Filter;
 using Library.Model.Requests;
 using Library.Model.Responses;
-using Library.WebAPI.Models;
 using Library.WebAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Library.WebAPI.Controllers
@@ -36,11 +31,6 @@ namespace Library.WebAPI.Controllers
             return await _authorsService.GetAuthorsPaginateAsync(request);
         }
 
-        //[HttpGet("search")]
-        //public ActionResult<List<AuthorGetDto>> GetAuthorsByBookId([FromQuery] AuthorsSearchRequest Request)
-        //{
-        //    return _authorsService.GetAuthorsByBookId(Request);
-        //}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAuthorByIdAsync(long id)
         {
@@ -48,23 +38,21 @@ namespace Library.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<AuthorsInsertResponse> Update([FromBody] AuthorsInsertRequest request)
+        public async Task<AuthorsInsertResponse> UpdateAuthorAsync([FromBody] AuthorsInsertRequest request)
         {
-            return await _authorsService.Update(request);
+            return await _authorsService.UpdateAuthorAsync(request);
         }
-
 
         [HttpPost]
-        public async Task<IActionResult> InsertAuthor([FromBody] AuthorsInsertRequest request)
+        public async Task<IActionResult> InsertAuthorAsync([FromBody] AuthorsInsertRequest request)
         {
-            return Ok(await _authorsService.InsertAuthor(request));
+            return Ok(await _authorsService.InsertAuthorAsync(request));
         }
 
-        // DELETE: api/Authors/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<AuthorGetDto>> DeleteAuthor(long id)
+        public async Task<ActionResult<AuthorGetDto>> DeleteAuthorAsync(long id)
         {
-            return await _authorsService.DeleteAuthor(id);
+            return await _authorsService.DeleteAuthorAsync(id);
         }
 
 

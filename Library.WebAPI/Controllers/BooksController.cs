@@ -3,9 +3,7 @@ using Library.Model.Requests;
 using Library.WebAPI.Models;
 using Library.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Library.WebAPI.Controllers
@@ -22,7 +20,7 @@ namespace Library.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<BookGetDto>> GetBooksAsync([FromQuery]BooksSearchRequest Request)
+        public async Task<List<BookGetDto>> GetBooksAsync([FromQuery] BooksSearchRequest Request)
         {
             return await _BooksService.GetBooksAsync(Request);
         }
@@ -38,26 +36,24 @@ namespace Library.WebAPI.Controllers
         {
             return Ok(await _BooksService.GetBookById(id));
         }
-        // DELETE: api/Books/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<BookGetDto>> DeleteBook(long id)
+
+        [HttpPost]
+        public async Task<IActionResult> InsertBookAsync([FromBody] BooksInsertRequest request)
         {
-            return await _BooksService.DeleteBook(id);
+            return Ok(await _BooksService.InsertBookAsync(request));
         }
 
         [HttpPut]
-        public async Task<Book> UpdateAsync([FromBody] BooksInsertRequest request)
+        public async Task<Book> UpdateBookAsync([FromBody] BooksInsertRequest request)
         {
-            return await _BooksService.UpdateAsync(request);
+            return await _BooksService.UpdateBookAsync(request);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> InsertBook([FromBody] BooksInsertRequest request)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BookGetDto>> DeleteBookAsync(long id)
         {
-            return Ok(await _BooksService.InsertBook(request));
+            return await _BooksService.DeleteBookAsync(id);
         }
-
-
 
     }
 }

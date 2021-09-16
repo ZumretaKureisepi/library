@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Library.Model.Responses
 {
@@ -12,6 +11,5 @@ namespace Library.Model.Responses
         public string Email { get; set; }
         public string Image { get; set; }
         public List<long> BookIds { get; set; }
-
     }
 }

@@ -16,20 +16,11 @@ namespace Library.WebAPI.Services
     {
         public Task<List<BookGetDto>> GetBooksAsync(BooksSearchRequest request);
         public Task<BookPaginateGetDto> GetBooksPaginateAsync(BooksSearchRequest request);
-
-        public Task<BookGetDto> DeleteBook(long id);
-        public Task<BooksInsertResponse> InsertBook(BooksInsertRequest Book);
-
         public Task<BookGetDto> GetBookById(long id);
-
-        public Task<Book> UpdateAsync(BooksInsertRequest request);
-
-
-
+        public Task<BooksInsertResponse> InsertBookAsync(BooksInsertRequest Book);
+        public Task<Book> UpdateBookAsync(BooksInsertRequest request);
+        public Task<BookGetDto> DeleteBookAsync(long id);
     }
-
-
-
 
     public class BooksService : IBooksService
     {
@@ -44,13 +35,11 @@ namespace Library.WebAPI.Services
 
         public async Task<List<BookGetDto>> GetBooksAsync(BooksSearchRequest request)
         {
-
-            var list = await _context.Books
+            var booksList = await _context.Books
             .Where(x => request.Title == null || x.Title.ToLower()
             .Contains(request.Title.ToLower())).OrderBy(x => x.BookId).ToListAsync();
 
-            return _mapper.Map<List<BookGetDto>>(list);
-
+            return _mapper.Map<List<BookGetDto>>(booksList);
         }
 
         public async Task<BookPaginateGetDto> GetBooksPaginateAsync(BooksSearchRequest request)
@@ -91,22 +80,44 @@ namespace Library.WebAPI.Services
             return bookGetDto;
         }
 
-        public async Task<Book> UpdateAsync(BooksInsertRequest request)
+        public async Task<BooksInsertResponse> InsertBookAsync(BooksInsertRequest Book)
         {
+            var newBook = _mapper.Map<Book>(Book);
 
+            _context.Books.Add(newBook);
+            await _context.SaveChangesAsync();
 
+            foreach (var item in Book.AuthorIds)
+            {
+                AuthBook book = new AuthBook
+                {
+                    BookId = newBook.BookId,
+                    AuthorId = item
+                };
+
+                _context.AuthBooks.Add(book);
+
+            }
+            await _context.SaveChangesAsync();
+
+            return new BooksInsertResponse();
+        }
+
+        public async Task<Book> UpdateBookAsync(BooksInsertRequest request)
+        {
             var book =await _context.Books
-       .Include(x => x.AuthBooks)
-       .FirstOrDefaultAsync(x => x.BookId == request.BookId);
+            .Include(x => x.AuthBooks)
+            .FirstOrDefaultAsync(x => x.BookId == request.BookId);
 
             var authBooksToRemove = book.AuthBooks.Where(x => !request.AuthorIds.Contains(x.AuthorId));
 
-            foreach (var author in authBooksToRemove)
+            foreach (var authBook in authBooksToRemove)
             {
-                author.IsDeleted = true;
+                authBook.IsDeleted = true;
             }
-            /*ako se medju id-ijevima autora iz baze ne nalazi id autora iz requesta onda se autor dodaje*/
+
             var authorIdsToInsert = request.AuthorIds.Where(x => !book.AuthBooks.Select(y => y.AuthorId).Contains(x));
+
             foreach (var authorId in authorIdsToInsert)
             {
                 book.AuthBooks.Add(new AuthBook
@@ -122,10 +133,9 @@ namespace Library.WebAPI.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Book>(book);
-
         }
 
-        public async Task<BookGetDto> DeleteBook(long id)
+        public async Task<BookGetDto> DeleteBookAsync(long id)
         {
             var Book =await _context.Books.FindAsync(id);
             if (Book == null && Book.IsDeleted)
@@ -138,37 +148,6 @@ namespace Library.WebAPI.Services
 
             return _mapper.Map<BookGetDto>(Book);
         }
-
-        public async Task<BooksInsertResponse> InsertBook(BooksInsertRequest Book)
-        {
-            var newBook = _mapper.Map<Book>(Book);
-
-            _context.Books.Add(newBook);
-            await _context.SaveChangesAsync();
-
-
-
-            foreach (var item in Book.AuthorIds)
-            {
-                AuthBook book = new AuthBook
-                {
-                    BookId = newBook.BookId,
-                    AuthorId = item
-                };
-                //newBook.AuthBooks.Add(book);
-
-
-                _context.AuthBooks.Add(book);
-
-            }
-            await _context.SaveChangesAsync();
-
-
-            return new BooksInsertResponse();
-
-            //return _mapper.Map<BooksInsertResponse>(newBook);
-        }
-
 
     }
 }

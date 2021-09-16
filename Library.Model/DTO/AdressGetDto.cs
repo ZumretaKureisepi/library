@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Library.Model.DTO
+﻿namespace Library.Model.DTO
 {
     public class AdressGetDto
     {
@@ -11,6 +7,5 @@ namespace Library.Model.DTO
         public string ZipCode { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-
     }
 }
