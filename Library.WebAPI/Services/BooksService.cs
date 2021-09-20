@@ -14,11 +14,11 @@ namespace Library.WebAPI.Services
 {
     public interface IBooksService
     {
-        public Task<List<BookGetDto>> GetBooksAsync(BooksSearchRequest request);
-        public Task<BookPaginateGetDto> GetBooksPaginateAsync(BooksSearchRequest request);
+        public Task<List<BookGetDto>> GetBooksAsync(BookSearchRequest request);
+        public Task<BookPaginateGetDto> GetBooksPaginateAsync(BookSearchRequest request);
         public Task<BookGetDto> GetBookById(long id);
-        public Task<BooksInsertResponse> InsertBookAsync(BooksInsertRequest Book);
-        public Task<Book> UpdateBookAsync(BooksInsertRequest request);
+        public Task<BookInsertResponse> InsertBookAsync(BookInsertRequest Book);
+        public Task<Book> UpdateBookAsync(BookInsertRequest request);
         public Task<BookGetDto> DeleteBookAsync(long id);
     }
 
@@ -33,7 +33,7 @@ namespace Library.WebAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<List<BookGetDto>> GetBooksAsync(BooksSearchRequest request)
+        public async Task<List<BookGetDto>> GetBooksAsync(BookSearchRequest request)
         {
             var booksList = await _context.Books
             .Where(x => request.Title == null || x.Title.ToLower()
@@ -42,7 +42,7 @@ namespace Library.WebAPI.Services
             return _mapper.Map<List<BookGetDto>>(booksList);
         }
 
-        public async Task<BookPaginateGetDto> GetBooksPaginateAsync(BooksSearchRequest request)
+        public async Task<BookPaginateGetDto> GetBooksPaginateAsync(BookSearchRequest request)
         {
             var query = _context.Books
                 .Where(x => request.Title == null || x.Title.ToLower().Contains(request.Title.ToLower())).OrderBy(x => x.BookId);
@@ -80,7 +80,7 @@ namespace Library.WebAPI.Services
             return bookGetDto;
         }
 
-        public async Task<BooksInsertResponse> InsertBookAsync(BooksInsertRequest Book)
+        public async Task<BookInsertResponse> InsertBookAsync(BookInsertRequest Book)
         {
             var bookToInsert = _mapper.Map<Book>(Book);
 
@@ -100,10 +100,10 @@ namespace Library.WebAPI.Services
             }
             await _context.SaveChangesAsync();
 
-            return new BooksInsertResponse();
+            return new BookInsertResponse();
         }
 
-        public async Task<Book> UpdateBookAsync(BooksInsertRequest request)
+        public async Task<Book> UpdateBookAsync(BookInsertRequest request)
         {
             var book =await _context.Books
             .Include(x => x.AuthBooks)

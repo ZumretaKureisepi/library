@@ -14,11 +14,11 @@ namespace Library.WebAPI.Services
 {
     public interface IAuthorsService
     {
-        public Task<List<AuthorGetDto>> GetAuthorsAsync(AuthorsSearchRequest request);
-        public Task<AuthorPaginateGetDto> GetAuthorsPaginateAsync(AuthorsSearchRequest request);
+        public Task<List<AuthorGetDto>> GetAuthorsAsync(AuthorSearchRequest request);
+        public Task<AuthorPaginateGetDto> GetAuthorsPaginateAsync(AuthorSearchRequest request);
         public Task<AuthorGetDto> GetAuthorByIdAsync(long id);
-        public Task<AuthorsInsertResponse> InsertAuthorAsync(AuthorsInsertRequest Author);
-        public Task<AuthorsInsertResponse> UpdateAuthorAsync(AuthorsInsertRequest request);
+        public Task<AuthorInsertResponse> InsertAuthorAsync(AuthorInsertRequest Author);
+        public Task<AuthorInsertResponse> UpdateAuthorAsync(AuthorInsertRequest request);
         public Task<AuthorGetDto> DeleteAuthorAsync(long id);
     }
     public class AuthorsService : IAuthorsService
@@ -32,7 +32,7 @@ namespace Library.WebAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<List<AuthorGetDto>> GetAuthorsAsync(AuthorsSearchRequest request)
+        public async Task<List<AuthorGetDto>> GetAuthorsAsync(AuthorSearchRequest request)
         {
             var authorsList = await _context.Authors
                 .Where(x => request.Name == null || x.Name.ToLower().Contains(request.Name.ToLower())).OrderBy(x => x.AuthorId).ToListAsync();
@@ -40,7 +40,7 @@ namespace Library.WebAPI.Services
             return _mapper.Map<List<AuthorGetDto>>(authorsList);
         }
 
-        public async Task<AuthorPaginateGetDto> GetAuthorsPaginateAsync(AuthorsSearchRequest request)
+        public async Task<AuthorPaginateGetDto> GetAuthorsPaginateAsync(AuthorSearchRequest request)
         {
             var query = _context.Authors
                 .Where(x => request.Name == null || x.Name.ToLower().Contains(request.Name.ToLower())).OrderBy(x => x.AuthorId);
@@ -77,7 +77,7 @@ namespace Library.WebAPI.Services
             return authorGetDto;
         }
 
-        public async Task<AuthorsInsertResponse> InsertAuthorAsync(AuthorsInsertRequest Author)
+        public async Task<AuthorInsertResponse> InsertAuthorAsync(AuthorInsertRequest Author)
         {
             var authorToInsert = _mapper.Map<Author>(Author);
 
@@ -96,10 +96,10 @@ namespace Library.WebAPI.Services
             }
             await _context.SaveChangesAsync();
 
-            return new AuthorsInsertResponse();
+            return new AuthorInsertResponse();
         }
 
-        public async Task<AuthorsInsertResponse> UpdateAuthorAsync(AuthorsInsertRequest request)
+        public async Task<AuthorInsertResponse> UpdateAuthorAsync(AuthorInsertRequest request)
         {
             var author =await _context.Authors
             .Include(x => x.AuthBooks)
@@ -128,7 +128,7 @@ namespace Library.WebAPI.Services
 
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<AuthorsInsertResponse>(author);
+            return _mapper.Map<AuthorInsertResponse>(author);
         }
 
         public async Task<AuthorGetDto> DeleteAuthorAsync(long id)

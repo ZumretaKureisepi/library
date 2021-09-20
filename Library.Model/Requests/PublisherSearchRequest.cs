@@ -2,7 +2,7 @@
 
 namespace Library.Model.Requests
 {
-    public class PublishersSearchRequest : PaginationFilter
+    public class PublisherSearchRequest : PaginationFilter
     {
         public string Name { get; set; }
     }

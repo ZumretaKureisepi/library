@@ -11,15 +11,15 @@ namespace Library.WebAPI
         public AutoMapperProfile()
         {
             CreateMap<Book, BookGetDto>();
-            CreateMap<Book, BooksInsertResponse>();
-            CreateMap<BooksInsertRequest, Book>();
+            CreateMap<Book, BookInsertResponse>();
+            CreateMap<BookInsertRequest, Book>();
             CreateMap<Author, AuthorGetDto>();
-            CreateMap<Author, AuthorsInsertResponse>();
-            CreateMap<AuthorsInsertRequest, Author>();
+            CreateMap<Author, AuthorInsertResponse>();
+            CreateMap<AuthorInsertRequest, Author>();
             CreateMap<Publisher, PublisherGetDto>();
-            CreateMap<Publisher, PublishersInsertResponse>();
-            CreateMap<PublishersInsertRequest, Publisher>();
-            CreateMap<PublishersInsertRequest, Adress>();
+            CreateMap<Publisher, PublisherInsertResponse>();
+            CreateMap<PublisherInsertRequest, Publisher>();
+            CreateMap<PublisherInsertRequest, Adress>();
             CreateMap<Adress, AdressGetDto>();
         }
     }

@@ -20,13 +20,13 @@ namespace Library.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<PublisherGetDto>> GetPublishersAsync([FromQuery] PublishersSearchRequest Request)
+        public async Task<List<PublisherGetDto>> GetPublishersAsync([FromQuery] PublisherSearchRequest Request)
         {
             return await _PublishersService.GetPublishersAsync(Request);
         }
 
         [HttpGet("paginate")]
-        public async Task<PublisherPaginateGetDto> GetPublishersPaginateAsync([FromQuery] PublishersSearchRequest request)
+        public async Task<PublisherPaginateGetDto> GetPublishersPaginateAsync([FromQuery] PublisherSearchRequest request)
         {
             return await _PublishersService.GetPublishersPaginateAsync(request);
         }
@@ -38,13 +38,13 @@ namespace Library.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertPublisherAsync([FromBody] PublishersInsertRequest request)
+        public async Task<IActionResult> InsertPublisherAsync([FromBody] PublisherInsertRequest request)
         {
             return Ok(await _PublishersService.InsertPublisherAsync(request));
         }
 
         [HttpPut]
-        public async Task<PublishersInsertResponse> UpdatePublisherAsync([FromBody] PublishersInsertRequest request)
+        public async Task<PublisherInsertResponse> UpdatePublisherAsync([FromBody] PublisherInsertRequest request)
         {
             return await _PublishersService.UpdatePublisherAsync(request);
         }

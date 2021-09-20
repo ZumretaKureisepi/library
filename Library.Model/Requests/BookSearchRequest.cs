@@ -2,7 +2,7 @@
 
 namespace Library.Model.Requests
 {
-    public class BooksSearchRequest : PaginationFilter
+    public class BookSearchRequest : PaginationFilter
     {
         public string Title { get; set; }
 

@@ -20,13 +20,13 @@ namespace Library.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<BookGetDto>> GetBooksAsync([FromQuery] BooksSearchRequest Request)
+        public async Task<List<BookGetDto>> GetBooksAsync([FromQuery] BookSearchRequest Request)
         {
             return await _BooksService.GetBooksAsync(Request);
         }
 
         [HttpGet("paginate")]
-        public async Task<BookPaginateGetDto> GetBooksPaginateAsync([FromQuery] BooksSearchRequest request)
+        public async Task<BookPaginateGetDto> GetBooksPaginateAsync([FromQuery] BookSearchRequest request)
         {
             return await _BooksService.GetBooksPaginateAsync(request);
         }
@@ -38,13 +38,13 @@ namespace Library.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertBookAsync([FromBody] BooksInsertRequest request)
+        public async Task<IActionResult> InsertBookAsync([FromBody] BookInsertRequest request)
         {
             return Ok(await _BooksService.InsertBookAsync(request));
         }
 
         [HttpPut]
-        public async Task<Book> UpdateBookAsync([FromBody] BooksInsertRequest request)
+        public async Task<Book> UpdateBookAsync([FromBody] BookInsertRequest request)
         {
             return await _BooksService.UpdateBookAsync(request);
         }
