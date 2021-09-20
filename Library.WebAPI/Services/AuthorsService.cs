@@ -86,12 +86,12 @@ namespace Library.WebAPI.Services
 
             foreach (var item in Author.BookIds)
             {
-                AuthBook authB = new AuthBook
+                AuthBook authBook = new AuthBook
                 {
                     AuthorId = authorToInsert.AuthorId,
                     BookId = item
                 };
-                _context.AuthBooks.Add(authB);
+                _context.AuthBooks.Add(authBook);
 
             }
             await _context.SaveChangesAsync();
@@ -133,17 +133,17 @@ namespace Library.WebAPI.Services
 
         public async Task<AuthorGetDto> DeleteAuthorAsync(long id)
         {
-            var Author =await _context.Authors.FindAsync(id);
+            var author =await _context.Authors.FindAsync(id);
 
-            if (Author == null && Author.IsDeleted)
+            if (author == null && author.IsDeleted)
             {
                 return null;
             }
 
-            Author.IsDeleted = true;
+            author.IsDeleted = true;
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<AuthorGetDto>(Author);
+            return _mapper.Map<AuthorGetDto>(author);
         }
     }
 }

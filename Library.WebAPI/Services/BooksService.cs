@@ -82,16 +82,16 @@ namespace Library.WebAPI.Services
 
         public async Task<BooksInsertResponse> InsertBookAsync(BooksInsertRequest Book)
         {
-            var newBook = _mapper.Map<Book>(Book);
+            var bookToInsert = _mapper.Map<Book>(Book);
 
-            _context.Books.Add(newBook);
+            _context.Books.Add(bookToInsert);
             await _context.SaveChangesAsync();
 
             foreach (var item in Book.AuthorIds)
             {
                 AuthBook book = new AuthBook
                 {
-                    BookId = newBook.BookId,
+                    BookId = bookToInsert.BookId,
                     AuthorId = item
                 };
 
@@ -137,16 +137,16 @@ namespace Library.WebAPI.Services
 
         public async Task<BookGetDto> DeleteBookAsync(long id)
         {
-            var Book =await _context.Books.FindAsync(id);
-            if (Book == null && Book.IsDeleted)
+            var book =await _context.Books.FindAsync(id);
+            if (book == null && book.IsDeleted)
             {
                 return null;
             }
 
-            Book.IsDeleted = true;
+            book.IsDeleted = true;
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BookGetDto>(Book);
+            return _mapper.Map<BookGetDto>(book);
         }
 
     }
